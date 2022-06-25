@@ -14,9 +14,8 @@ public class MethodRef extends Constant{
   private final JClass self;
   private final boolean interface_;
 
-  private ClassRef classRef;
+  private String className;
   private NameAndTypeConstant nameAndType;
-  private MethodInfo method;
 
   @SneakyThrows
   MethodRef(DataInput input, JClass jClass, boolean interface_){
@@ -26,34 +25,28 @@ public class MethodRef extends Constant{
     this.interface_ = interface_;
   }
 
-  public JClass jClass(){
-    return classRef().value();
-  }
-
-  private ClassRef classRef(){
-    if(classRef == null){
-      classRef = (ClassRef) self.constantPool().constant(classIndex);
+  public String getClassName(){
+    if(className == null){
+      className = ((ClassRef)self.constantPool().constant(classIndex)).name();
     }
-    return classRef;
+    return className;
   }
 
-  private NameAndTypeConstant nameAndType(){
+  public NameAndTypeConstant nameAndType(){
     if(nameAndType == null){
       nameAndType = (NameAndTypeConstant) self.constantPool().constant(nameAndTypeIndex);
     }
     return nameAndType;
   }
 
-  public MethodInfo value(){
-    if(method != null){
-      return method;
-    }
 
-    var pair = nameAndType().value();
-    method = jClass().findMethod(pair.getLeft(), pair.getRight());
-    if(method == null){
-      throw new Error("NO such method");
+  @Override
+  public String toString(){
+    if(!interface_) {
+      return String.format("Methodref: %s.%s:%s", className, nameAndType.name(), nameAndType.type());
     }
-    return method;
+    else {
+      return String.format("InterfaceMethodref: %s.%s:%s", className, nameAndType.name(), nameAndType.type());
+    }
   }
 }

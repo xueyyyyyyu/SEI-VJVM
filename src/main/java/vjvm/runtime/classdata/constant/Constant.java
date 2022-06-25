@@ -23,7 +23,7 @@ public abstract class Constant {
         result = new ClassRef(input, jClass);
         break;
       case CONSTANT_Fieldref:
-        result = new FieldRef(input, jClass);//还不知道怎么写
+        result = new FieldRef(input, jClass);
         break;
       case CONSTANT_Methodref:
         result = new MethodRef(input, jClass, false);
@@ -32,7 +32,7 @@ public abstract class Constant {
         result = new MethodRef(input, jClass, true);
         break;
       case CONSTANT_String:
-        result = new StringConstant(input, jClass);//瞎写的
+        result = new StringConstant(input, jClass);
         break;
       case CONSTANT_Integer:
         result = new IntegerConstant(input);
