@@ -1,7 +1,6 @@
 package vjvm.runtime.classdata.constant;
 
 import lombok.SneakyThrows;
-import sun.jvm.hotspot.runtime.ClassConstants;
 import vjvm.runtime.JClass;
 
 import java.io.DataInput;
@@ -37,6 +36,6 @@ public class FieldRef extends Constant{
 
   @Override
   public String toString(){
-    return String.format("Fieldref: %s.%s:%s", name, nameAndType.name(), nameAndType.type());
+    return String.format("Fieldref: %s.%s:%s", className(), getNameAndType().name(), getNameAndType().type());
   }
 }

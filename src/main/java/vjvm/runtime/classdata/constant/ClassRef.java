@@ -37,6 +37,6 @@ public class ClassRef extends Constant{
 
   @Override
   public String toString(){
-    return String.format("Class: %s", name);
+    return String.format("Class: %s", name());
   }
 }

@@ -2,9 +2,7 @@ package vjvm.runtime.classdata.constant;
 
 import lombok.SneakyThrows;
 import lombok.var;
-import sun.tools.jconsole.ProxyClient;
 import vjvm.runtime.JClass;
-import vjvm.runtime.classdata.MethodInfo;
 
 import java.io.DataInput;
 
@@ -43,10 +41,10 @@ public class MethodRef extends Constant{
   @Override
   public String toString(){
     if(!interface_) {
-      return String.format("Methodref: %s.%s:%s", className, nameAndType.name(), nameAndType.type());
+      return String.format("Methodref: %s.%s:%s", getClassName(), nameAndType().name(), nameAndType.type());
     }
     else {
-      return String.format("InterfaceMethodref: %s.%s:%s", className, nameAndType.name(), nameAndType.type());
+      return String.format("InterfaceMethodref: %s.%s:%s", getClassName(), nameAndType().name(), nameAndType.type());
     }
   }
 }

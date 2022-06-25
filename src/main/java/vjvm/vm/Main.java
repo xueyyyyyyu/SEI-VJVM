@@ -1,6 +1,5 @@
 package vjvm.vm;
 
-import jdk.internal.org.objectweb.asm.Label;
 import lombok.var;
 import picocli.CommandLine;
 import vjvm.classfiledefs.Descriptors;
@@ -100,19 +99,19 @@ class Dump implements Callable<Integer> {
     }
 
     out.printf("\ninterfaces:\n");
-    for(int i = 0; i < c.superInterfacesCount(); i++){
+    for(int i = 0; i < c.superInterfacesCount(); ++i){
       var s = c.superInterface(i);
       out.printf("%s\n", s.name());
     }
 
     out.printf("\nfields:\n");
-    for(int i = 0; i < c.fieldsCount(); i++){
+    for(int i = 0; i < c.fieldsCount(); ++i){
       var f = c.field(i);
       out.printf("%s(0x%x): %s\n", f.name(), f.accessFlags(), f.descriptor());
     }
 
     out.printf("\nmethods:\n");
-    for(int i = 0; i < c.methodsCount(); i++){
+    for(int i = 0; i < c.methodsCount(); ++i){
       var m = c.method(i);
       out.printf("%s(0x%x): %s\n", m.name(), m.accessFlags(), m.descriptor());
     }
