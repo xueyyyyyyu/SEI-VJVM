@@ -106,7 +106,7 @@ public class JClass {
   public boolean synthetic() {
     return (accessFlags & ACC_SYNTHETIC) != 0;
   }
-
+//
   public boolean annotation() {
     return (accessFlags & ACC_ANNOTATION) != 0;
   }
