@@ -1,5 +1,6 @@
 package vjvm.runtime.classdata.constant;
 
+import lombok.experimental.FieldNameConstants;
 import lombok.var;
 import lombok.SneakyThrows;
 import lombok.var;
@@ -14,38 +15,49 @@ public abstract class Constant {
   @SneakyThrows
   public static Pair<Constant, Integer> constructFromData(DataInput input, JClass jClass) {
     var tag = input.readByte();
-    var count = 1;
+    var count = (tag == CONSTANT_Long || tag == CONSTANT_Double) ? 2 : 1;
 
-    // TODO: construct Float, Double, Class, Fieldref, Methodref, InterfaceMethodref, String, and Long
     Constant result;
     switch (tag) {
+      case CONSTANT_Class:
+        result = new ClassRef(input, jClass);
+        break;
+      case CONSTANT_Fieldref:
+        result = new FieldRef(input, jClass);//还不知道怎么写
+        break;
+      case CONSTANT_Methodref:
+        result = new MethodRef(input, jClass, false);
+        break;
+      case CONSTANT_InterfaceMethodref:
+        result = new MethodRef(input, jClass, true);
+        break;
+      case CONSTANT_String:
+        result = new StringConstant(input, jClass);//瞎写的
+        break;
       case CONSTANT_Integer:
         result = new IntegerConstant(input);
+        break;
+      case CONSTANT_Float:
+        result = new FloatConstant(input);
+        break;
+      case CONSTANT_Long:
+        result = new LongConstant(input);
+        break;
+      case CONSTANT_Double:
+        result = new DoubleConstant(input);
+        break;
+      case CONSTANT_MethodType:
+        result = new UnknownConstant(input, 2);
+        break;
+      case CONSTANT_Utf8:
+        result = new UTF8Constant(input);
         break;
       case CONSTANT_NameAndType:
         result = new NameAndTypeConstant(input, jClass);
         break;
-      case CONSTANT_Utf8: {
-        result = new UTF8Constant(input);
-        break;
-      }
-      case CONSTANT_Double:
-      case CONSTANT_Long:
-        result = new UnknownConstant(input, 8);
-        count = 2;
-        break;
       case CONSTANT_MethodHandle:
         result = new UnknownConstant(input, 3);
         break;
-      case CONSTANT_String:
-      case CONSTANT_Class:
-      case CONSTANT_MethodType:
-        result = new UnknownConstant(input, 2);
-        break;
-      case CONSTANT_Float:
-      case CONSTANT_Fieldref:
-      case CONSTANT_Methodref:
-      case CONSTANT_InterfaceMethodref:
       case CONSTANT_Dynamic:
       case CONSTANT_InvokeDynamic:
         result = new UnknownConstant(input, 4);

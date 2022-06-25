@@ -56,8 +56,6 @@ public class JClassLoader implements Closeable {
     }
 
     return null;
-    // To construct a JClass, use the following constructor
-    // return new JClass(new DataInputStream(istream_from_file), this);
   }
 
   @Override
