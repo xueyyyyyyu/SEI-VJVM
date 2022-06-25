@@ -5,6 +5,7 @@ import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
+import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.utils.UnimplementedError;
 import java.io.DataInput;
 import java.io.InvalidClassException;
@@ -26,6 +27,11 @@ public class JClass {
   private final ConstantPool constantPool;
   @Getter
   private final int accessFlags;
+  @Getter
+  private final ClassRef thisClass;
+  @Getter
+  private final ClassRef superClass;
+  private final ClassRef[] interfaces;
   private final FieldInfo[] fields;
   private final MethodInfo[] methods;
   private final Attribute[] attributes;
@@ -46,22 +52,35 @@ public class JClass {
 
     constantPool = new ConstantPool(dataInput, this);
     accessFlags = dataInput.readUnsignedShort();
+    thisClass = (ClassRef) constantPool.constant(dataInput.readUnsignedShort());
 
-    fields = null;
-    methods = null;
-    attributes = null;
-    throw new UnimplementedError(
-        "TODO: you need to construct thisClass, superClass, interfaces, fields, "
-        + "methods, and attributes from dataInput in lab 1.2; remove this for lab 1.1."
-        + "Some of them are not defined; you need to define them yourself");
-  }
+    var superIndex = dataInput.readUnsignedShort();
+    superClass = superIndex == 0 ? null : (ClassRef) constantPool.constant(superIndex);
 
-  public MethodInfo findMethod(String name, String descriptor) {
-    for (var method : methods)
-      if (method.name().equals(name) && method.descriptor().equals(descriptor))
-        return method;
+    var interfacesCount = dataInput.readUnsignedShort();
+    interfaces = new ClassRef[interfacesCount];
+    for(var i = 0; i < interfacesCount; i++){
+      var interfaceIndex = dataInput.readUnsignedShort();
+      interfaces[i] = (ClassRef) constantPool.constant(interfaceIndex);
+    }
 
-    return null;
+    var fieldCount = dataInput.readUnsignedShort();
+    fields = new FieldInfo[fieldCount];
+    for(var i = 0; i < fieldCount; i++){
+      fields[i] = new FieldInfo(dataInput, this);
+    }
+
+    var methodsCount = dataInput.readUnsignedShort();
+    methods = new MethodInfo[methodsCount];
+    for(var i = 0; i < methodsCount; i++){
+      methods[i] = new MethodInfo(dataInput, this);
+    }
+
+    var attributesCount = dataInput.readUnsignedShort();
+    attributes = new Attribute[attributesCount];
+    for(var i = 0; i < attributesCount; i++){
+      attributes[i] = Attribute.constructFromData(dataInput, constantPool);
+    }
   }
 
   public boolean public_() {
@@ -116,8 +135,11 @@ public class JClass {
     return methods[index];
   }
 
-  public String name() {
-    // TODO: return class name from thisClass
-    throw new UnimplementedError();
+  public ClassRef superInterface(int index){
+    return interfaces[index];
   }
+
+  public int superInterfacesCount(){return interfaces.length;}
+
+  public String name(){return thisClass().name();}
 }

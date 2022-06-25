@@ -2,7 +2,6 @@ package vjvm.runtime.classdata.constant;
 
 import lombok.var;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.tuple.Pair;
 import vjvm.runtime.JClass;
 
 import java.io.DataInput;

@@ -7,7 +7,6 @@ import lombok.SneakyThrows;
 import java.io.DataInput;
 
 public class IntegerConstant extends Constant {
-  @Getter
   private final int value;
 
   @SneakyThrows
@@ -15,8 +14,12 @@ public class IntegerConstant extends Constant {
     value = input.readInt();
   }
 
+  public Integer value(){
+    return value;
+  }
+
   @Override
   public String toString() {
-    return String.format("Integer: %d", value);
+    return String.format("Integer: %d", value());
   }
 }
