@@ -1,8 +1,10 @@
 package vjvm.runtime.classdata.constant;
 
+
 import lombok.var;
 import lombok.SneakyThrows;
 import vjvm.runtime.JClass;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.DataInput;
 
@@ -32,6 +34,10 @@ public class NameAndTypeConstant extends Constant {
       descriptor = ((UTF8Constant) self.constantPool().constant(descriptorIndex)).value();
     }
     return descriptor;
+  }
+
+  public Pair<String, String> value(){
+    return Pair.of(name(), type());
   }
 
   @Override

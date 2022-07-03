@@ -83,6 +83,14 @@ public class JClass {
     }
   }
 
+  public MethodInfo findMethod(String name, String descriptor) {
+    for (var method : methods)
+      if (method.name().equals(name) && method.descriptor().equals(descriptor))
+        return method;
+
+    return null;
+  }
+
   public boolean public_() {
     return (accessFlags & ACC_PUBLIC) != 0;
   }

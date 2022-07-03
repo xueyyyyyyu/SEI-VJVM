@@ -49,6 +49,13 @@ public class MethodInfo {
 
     for(int i = 0; i < attributesCount; i++)
       attributes[i] = Attribute.constructFromData(dataInput, constantPool);
+
+    for(var i : attributes){
+      if(i instanceof Code){
+        code = (Code) i;
+        break;
+      }
+    }
   }
 
   public int argc() {
